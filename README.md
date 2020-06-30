@@ -2,35 +2,38 @@
 
 # React Example
 
-This directory is a brief example of a [React](https://reactjs.org/) app with [Serverless Functions](https://vercel.com/docs/v2/serverless-functions/introduction) that can be deployed with Vercel and zero configuration.
+Page is created by react-scripts build output.
+Simply tell the host provider this is where it should host the files.
 
-## Deploy Your Own
 
-Deploy your own React project, along with Serverless Functions, with Vercel.
+# Server side code
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/zeit/now/tree/master/examples/create-react-app-functions)
+## Vercel
+ Deployed to Vercel with vercel cli.
+ Serverless functions are called from within /api directory.
+ When a request to the endpoint is requested (via href or button click to /api/<endpoint>) the api will be invoked.
 
-_Live Example: https://create-react-app.now-examples.now.sh/_
+## Firebase
+ If there is a need to migrate to a different provider such as firebase. You can continue to host the web files in the build directory.
+ Serverless functions are defined in the /server directory. 
+ The index.js file defines the routes and the middleware function to be invoked on a incoming http request.
 
-### How We Created This Example
+ firebase.json defines a rule that all http requests to <url>/api/** will invoke the app function that we defined in index.js 
 
-To get started with React, along with [Serverless Functions](https://vercel.com/docs/v2/serverless-functions/introduction), with Vercel, you can use the [Create-React-App CLI](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app) to initialize the project:
+```
+const express = require('express');
+var router = require('express').Router;
+router = new router(); 
+# define routes...
+#
+# firebase admin config
+# ...
+# ...
 
-```shell
-$ npx create-react-app my-app
+exports.app = functions.runWith({ memory: '2GB' }).https.onRequest( router );
 ```
 
-### Deploying From Your Terminal
-
-You can deploy your new React project, along with [Serverless Functions](https://vercel.com/docs/v2/serverless-functions/introduction), with a single command from your terminal using [Now CLI](https://vercel.com/download):
-
-```shell
-$ now
-```
-
-
-### URL
-
-Lottie: https://airbnb.io/lottie/#/web
-Zeit/Vercel: https://vercel.com/
-Lottie Files: https://lottiefiles.com/
+# AWS - TO TEST
+ S3 would host the build output
+ Cloudfront would be the edge CDN.
+ Web server would run on a EC2/lightsail server.
