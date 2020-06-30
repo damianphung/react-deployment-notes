@@ -33,7 +33,18 @@ router = new router();
 exports.app = functions.runWith({ memory: '2GB' }).https.onRequest( router );
 ```
 
-# AWS - TO TEST
- S3 would host the build output
- Cloudfront would be the edge CDN.
- Web server would run on a EC2/lightsail server.
+# AWS 
+ Set up Cloudfront. Set Origin Domain as the web server. (ALB / ELB or EC2 ). This is where the CDN's will get the original web files.
+ Web server runs node/server.js
+
+ static files are served from build directory.
+
+ How to serve static files from S3, but dynamic content from EC2?
+ Setup cloudfront with S3 as the default path pattern.
+ - Set Default Root object to index.html or your entry point page.
+ Then add EC2 domain in Origin Domain field, for dynamic content
+ - You can customize the path pattern for this Origin, such as /api/* . This tells CloudFront all /api URI requests are directed to the EC2 Origin specified.
+
+
+ ![See here](https://aws.amazon.com/blogs/networking-and-content-delivery/amazon-s3-amazon-cloudfront-a-match-made-in-the-cloud)
+
